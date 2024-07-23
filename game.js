@@ -42,9 +42,7 @@ function drawBall() {
 }
 
 function drawScore() {
-    ctx.font = '20px Arial';
-    ctx.fillStyle = 'black';
-    ctx.fillText(`Score: ${score}`, 20, 30);
+    document.getElementById('score').innerText = score;
 }
 
 function drawObstacles() {
