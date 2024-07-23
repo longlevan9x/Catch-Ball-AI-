@@ -1,7 +1,15 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const player = {
+// Set canvas dimensions
+function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    adjustSizes();
+}
+window.addEventListener('resize', resizeCanvas);
+
+let player = {
     x: canvas.width / 2 - 50,
     y: canvas.height - 30,
     width: 100,
@@ -10,7 +18,7 @@ const player = {
     dx: 0
 };
 
-const ball = {
+let ball = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     size: 10,
@@ -27,6 +35,19 @@ const obstacles = [
     { x: 400, y: 200, width: 100, height: 20 },
     { x: 600, y: 400, width: 100, height: 20 }
 ];
+
+function adjustSizes() {
+    // Adjust player size
+    player.width = canvas.width * 0.1;
+    player.height = canvas.height * 0.03;
+    player.x = canvas.width / 2 - player.width / 2;
+    player.y = canvas.height - player.height - 10;
+
+    // Adjust ball size
+    ball.size = canvas.width * 0.02;
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+}
 
 function drawPlayer() {
     ctx.fillStyle = 'blue';
@@ -158,6 +179,40 @@ function keyUp(e) {
 
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
+
+// Touch event handlers
+canvas.addEventListener('touchstart', handleTouchStart, false);
+canvas.addEventListener('touchmove', handleTouchMove, false);
+canvas.addEventListener('touchend', handleTouchEnd, false);
+
+function handleTouchStart(e) {
+    const touch = e.touches[0];
+    const touchX = touch.clientX - canvas.getBoundingClientRect().left;
+    if (touchX < player.x + player.width / 2) {
+        player.dx = -player.speed;
+    } else {
+        player.dx = player.speed;
+    }
+}
+
+function handleTouchMove(e) {
+    const touch = e.touches[0];
+    const touchX = touch.clientX - canvas.getBoundingClientRect().left;
+    player.x = touchX - player.width / 2;
+
+    // Wall detection
+    if (player.x < 0) {
+        player.x = 0;
+    }
+
+    if (player.x + player.width > canvas.width) {
+        player.x = canvas.width - player.width;
+    }
+}
+
+function handleTouchEnd(e) {
+    player.dx = 0;
+}
 
 // Increase ball speed every 5 seconds
 setInterval(increaseSpeed, speedIncreaseInterval);
