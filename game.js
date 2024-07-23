@@ -22,6 +22,12 @@ const ball = {
 let score = 0;
 let speedIncreaseInterval = 5000; // 5 seconds
 
+const obstacles = [
+    { x: 200, y: 300, width: 100, height: 20 },
+    { x: 400, y: 200, width: 100, height: 20 },
+    { x: 600, y: 400, width: 100, height: 20 }
+];
+
 function drawPlayer() {
     ctx.fillStyle = 'blue';
     ctx.fillRect(player.x, player.y, player.width, player.height);
@@ -39,6 +45,13 @@ function drawScore() {
     ctx.font = '20px Arial';
     ctx.fillStyle = 'black';
     ctx.fillText(`Score: ${score}`, 20, 30);
+}
+
+function drawObstacles() {
+    ctx.fillStyle = 'green';
+    obstacles.forEach(obstacle => {
+        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    });
 }
 
 function clear() {
@@ -82,6 +95,18 @@ function moveBall() {
         score++;
     }
 
+    // Obstacle collision
+    obstacles.forEach(obstacle => {
+        if (
+            ball.x + ball.size > obstacle.x &&
+            ball.x - ball.size < obstacle.x + obstacle.width &&
+            ball.y + ball.size > obstacle.y &&
+            ball.y - ball.size < obstacle.y + obstacle.height
+        ) {
+            ball.dy *= -1;
+        }
+    });
+
     // Bottom wall collision - Game Over
     if (ball.y + ball.size > canvas.height) {
         document.location.reload();
@@ -107,6 +132,7 @@ function update() {
     drawPlayer();
     drawBall();
     drawScore();
+    drawObstacles();
     movePlayer();
     moveBall();
 
