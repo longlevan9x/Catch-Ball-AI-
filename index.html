@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Hứng Bi</title>
+    <title>Game Hứng Bi</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             background-color: #f8f9fa;
         }
-        canvas {
-            border: 1px solid black;
-            display: block;
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
             margin: 0 auto;
+        }
+        canvas {
+            width: 100%;
+            height: auto;
             background-color: #ffffff;
+            border: 2px solid #000; /* Thêm khung viền cho canvas */
         }
         .score-board {
             text-align: center;
@@ -25,7 +31,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8">
-                <canvas id="gameCanvas" width="800" height="600"></canvas>
+                <div class="game-container">
+                    <canvas id="gameCanvas"></canvas>
+                </div>
                 <div class="score-board">
                     <h3>Score: <span id="score">0</span></h3>
                 </div>
